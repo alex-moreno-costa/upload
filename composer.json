@@ -1,0 +1,23 @@
+{
+    "name": "alex/upload",
+    "description": "Classe para gerenciamento de uploads",
+    "type": "lib",
+    "require": {},
+    "license": "mit",
+    "authors": [
+        {
+            "name": "Alex Moreno",
+            "email": "alex.moreno.costa@gmail.com"
+        }
+    ],
+    "minimum-stability": "dev", 
+    "autoload": {
+        "psr-4": {
+            "Alex\\Upload\\": "", 
+            "Alex\\File\\": "file"
+        }
+    },
+    "require-dev": {
+        "phpunit/phpunit": "5.1.4"
+    }
+}
