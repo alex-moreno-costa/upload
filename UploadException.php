@@ -50,6 +50,7 @@ class UploadException extends \Exception
                 break;
 
             default:
+                return 'Erro desconhecido';
                 break;
         }
     }
