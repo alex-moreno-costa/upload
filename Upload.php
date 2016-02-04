@@ -5,39 +5,10 @@ namespace Alex\Upload;
 use Alex\Upload\UploadException;
 use Alex\Upload\UploadConfig;
 use SplFileInfo;
+use Alex\Upload\IUploadedFile;
 
 class Upload
 {
-    /**
-     * The file name of the uploaded file
-     * @var string
-     */
-    private $uploadedName;
-
-    /**
-     * The mime type of the uploated file
-     * @var string
-     */
-    private $uploadedMimeType;
-
-    /**
-     * The temporary directory of the uploaded file
-     * @var string
-     */
-    private $uploadedTempFile;
-
-    /**
-     * The number error of the uploaded file
-     * @var int
-     */
-    private $uploadedError;
-
-    /**
-     * The size of uploaded file
-     * @var int
-     */
-    private $uploadedSize;
-    
     /**
      * The target directory to moves the uploaded file
      * @var string
@@ -65,6 +36,12 @@ class Upload
      * @var UploadConfig 
      */
     private $config;
+    
+    /**
+     *
+     * @var IUploadedFile
+     */
+    private $uploadedFile;
 
     /**
      * Constructs the class with the minimal requeriments to upload a file sucessfuly
@@ -74,22 +51,9 @@ class Upload
      */
     public function __construct(array $uploadedFile, $targetDirectory)
     {
-        if (!is_uploaded_file($uploadedFile['tmp_name'])) {
-            //throw new \RuntimeException('O arquivo informado não é de um upload');
-        }
-        
-        if ($uploadedFile['error'] != 0) {
-            throw new UploadException($uploadedFile['error']);
-        }
-        
-        $this->uploadedError = $uploadedFile['error'];
-        $this->uploadedMimeType = $uploadedFile['type'];
-        $this->uploadedTempFile = $uploadedFile['tmp_name'];
-        $this->uploadedSize = $uploadedFile['size'];
-        $this->config = new UploadConfig;
-        
+        $this->uploadedFile = new UploadedFile($uploadedFile);
         $this->setTargetDirectory($targetDirectory);
-        $this->setFileName($uploadedFile['name']);
+        $this->setFileName($this->uploadedFile->getFileName());
     }
 
     /**

@@ -1,5 +1,5 @@
 {
-    "name": "alex-moreno-costa/upload",
+    "name": "alex/upload",
     "description": "Classe para gerenciamento de uploads",
     "type": "lib",
     "require": {},
