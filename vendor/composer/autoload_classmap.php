@@ -186,6 +186,7 @@ return array(
     'PHP_CodeCoverage_Exception' => $vendorDir . '/phpunit/php-code-coverage/src/CodeCoverage/Exception/Exception.php',
     'PHP_CodeCoverage_Filter' => $vendorDir . '/phpunit/php-code-coverage/src/CodeCoverage/Filter.php',
     'PHP_CodeCoverage_InvalidArgumentException' => $vendorDir . '/phpunit/php-code-coverage/src/CodeCoverage/Exception/InvalidArgumentException.php',
+    'PHP_CodeCoverage_MissingCoversAnnotationException' => $vendorDir . '/phpunit/php-code-coverage/src/CodeCoverage/Exception/MissingCoversAnnotationException.php',
     'PHP_CodeCoverage_Report_Clover' => $vendorDir . '/phpunit/php-code-coverage/src/CodeCoverage/Report/Clover.php',
     'PHP_CodeCoverage_Report_Crap4j' => $vendorDir . '/phpunit/php-code-coverage/src/CodeCoverage/Report/Crap4j.php',
     'PHP_CodeCoverage_Report_Factory' => $vendorDir . '/phpunit/php-code-coverage/src/CodeCoverage/Report/Factory.php',

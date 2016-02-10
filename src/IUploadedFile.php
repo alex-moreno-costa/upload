@@ -12,4 +12,5 @@ interface IUploadedFile
     public function getFileMimeType();
     public function getTemporaryFile();
     public function getFileError();
+    public function getExtension();
 }

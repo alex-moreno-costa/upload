@@ -8,9 +8,10 @@
  * 
  * total: 1223 extensions as of 16 November 2015
  */
+namespace Alex\Upload\Helper;
+
 class MimeTypes
 {
-
     private $mimeTypes;
 
     public function __construct()
@@ -1255,5 +1256,14 @@ class MimeTypes
         $extension = mb_strtolower($extension);
         
         return $this->mimeTypes[$extension];
+    }
+    
+    public function getExtensionByMimeType($mimeType)
+    {
+        foreach ($this->mimeTypes as $extension => $mimeTypes) {
+            if (in_array($mimeType, $mimeTypes)) {
+                return $extension;
+            }
+        }
     }
 }

@@ -49,6 +49,7 @@ class UploadedFileTest extends PHPUnit
         $this->assertEquals($this->files['tmp_name'], $uploadedFile->getTemporaryFile());
         $this->assertEquals($this->files['size'], $uploadedFile->getFileSize());
         $this->assertEquals($this->files['type'], $uploadedFile->getFileMimeType());
+        $this->assertEquals('txt', $uploadedFile->getExtension());
     }
     
     /**

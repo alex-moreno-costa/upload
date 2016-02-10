@@ -42,7 +42,6 @@ class UploadedFile implements IUploadedFile
      */
     private $uploadedSize;
     
-    
     public function __construct(array $uploadedFile)
     {
         if (!is_uploaded_file($uploadedFile['tmp_name'])) {
@@ -58,6 +57,7 @@ class UploadedFile implements IUploadedFile
         $this->uploadedTempFile = $uploadedFile['tmp_name'];
         $this->uploadedSize = (int) $uploadedFile['size'];
         $this->uploadedName = $uploadedFile['name'];
+        
     }
     
     public function getFileError()
@@ -83,5 +83,11 @@ class UploadedFile implements IUploadedFile
     public function getTemporaryFile()
     {
         return $this->uploadedTempFile;
+    }
+    
+    public function getExtension()
+    {
+        preg_match('/\.([a-zA-Z]{3,4})$/', $this->uploadedName, $matches);
+        return $matches[1];
     }
 }

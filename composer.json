@@ -13,8 +13,7 @@
     "minimum-stability": "dev", 
     "autoload": {
         "psr-4": {
-            "Alex\\Upload\\": "", 
-            "Alex\\File\\": "file"
+            "Alex\\Upload\\": "src"
         }
     },
     "require-dev": {
