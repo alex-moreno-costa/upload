@@ -5,26 +5,26 @@ namespace Alex\Upload;
 use Alex\Upload\UploadedFile;
 use \SplFileInfo;
 
-abstract class Upload
+class Upload
 {
 
     /**
      * The target directory to moves the uploaded file
      * @var string
      */
-    protected $targetDirectory;
+    private $targetDirectory;
 
     /**
      * A array of permited mime type for the upload
      * @var array
      */
-    protected $allowedMimeTypes = array();
+    private $allowedMimeTypes = array();
 
     /**
      * Permite ou não sobrescrever o arquivo caso ele exista.
      * @var boolean O valor padrão é falso
      */
-    protected $allowOverwrite = false;
+    private $allowOverwrite = false;
 
     /**
      * Recebe a instancia do objeto UploadedFile
@@ -44,17 +44,24 @@ abstract class Upload
      */
     private $file;
 
+    public function __construct(UploadedFile $uploadedFile)
+    {
+        $this->uploadedFile = $uploadedFile;
+    }
+    
     /**
      * Define the directory for the upload file be moved, case the directory does 
-     * exists and the parameter create is true, the dicrectory will be created
+     * not exists and the parameter create is true, the dicrectory will be created
      * @param string $directory
      * @param boolean $create
      * @throws \RuntimeException if the given directory does exists and the create parameter is false
      */
     public function setTargetDirectory($directory, $create = true)
     {
+        $create = boolval($create);
+        
         if (!is_dir($directory) && $create === false) {
-            throw new \RuntimeException(sprintf('O diretório informado "%s" não existe', $directory));
+            throw new \RuntimeException(sprintf('The Informed directory "%s" does not exist', $directory));
         }
 
         if (!is_dir($directory) && $create === true) {
@@ -71,15 +78,6 @@ abstract class Upload
     public function setAllowOverwrite($allowOverwrite)
     {
         $this->allowOverwrite = boolval($allowOverwrite);
-    }
-
-    /**
-     * Instancia do objeto UploadedFile
-     * @param UploadedFile $uploadedFile
-     */
-    protected function setUploadedFile(UploadedFile $uploadedFile)
-    {
-        $this->uploadedFile = $uploadedFile;
     }
 
     /**
@@ -116,7 +114,7 @@ abstract class Upload
     public function getFile()
     {
         if (!$this->file instanceof SplFileInfo) {
-            throw new \BadMethodCallException('Para usar esse metodo faça o upload do arquivo executando o metodo run()');
+            throw new \BadMethodCallException('To use this method please execute the method run() first');
         }
 
         return $this->file;
@@ -131,6 +129,15 @@ abstract class Upload
     {
         $this->validate();
         $destination = $this->targetDirectory . '/' . $this->fileName;
+        
+        if (is_file($destination) && $this->allowOverwrite === false) {
+            throw new \RuntimeException(
+                    sprintf('The file "%s" already exist and the option overwrite is seted "%d"', 
+                            $destination, $this->allowOverwrite
+                            )
+                    );
+        }
+        
         move_uploaded_file($this->uploadedFile->getTemporaryFile(), $destination);
         $this->file = new SplFileInfo($destination);
         return $this->file;

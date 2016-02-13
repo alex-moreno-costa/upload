@@ -45,7 +45,7 @@ class UploadedFile implements IUploadedFile
     public function __construct(array $uploadedFile)
     {
         if (!is_uploaded_file($uploadedFile['tmp_name'])) {
-            //throw new \RuntimeException('O arquivo informado não é de um upload');
+            throw new \RuntimeException('O arquivo informado não é de um upload');
         }
         
         if ($uploadedFile['error'] != 0) {
