@@ -42,46 +42,6 @@ class MultipleUploadedFileTest extends PHPUnit
         $this->assertInstanceOf('Alex\Upload\MultipleUploadedFile', $uploadedFile);
     }
     
-    /**
-     * @dataProvider provedorDeNomesValidos
-     * @param string $nome
-     */
-    public function testRenomearArquivoComNomesValidos($nome)
-    {
-        $uploadedFile = new MultipleUploadedFile($this->files, __DIR__);
-        //$this->assertNull($uploadedFile->setFileNewName($nome));
-    }
-    
-    public function provedorDeNomesValidos()
-    {
-        return array(
-            array('arquivo'),
-            array('arquivo01'),
-            array('ação'),
-            array('01234'),
-            array('teste.txt'),
-        );
-    }
-    
-    /**
-     * @dataProvider provedorDeNomesInvalidos
-     * @expectedException \InvalidArgumentException
-     * @param string $nome
-     */
-    public function testRenomearArquivoComNomesInvalidos($nome)
-    {
-        $uploadedFile = new MultipleUploadedFile($this->files, __DIR__);
-        //$this->assertNull($uploadedFile->setFileNewName($nome));
-    }
-    
-    public function provedorDeNomesInvalidos()
-    {
-        return array(
-            array(''),
-            array(null),
-        );
-    }
-    
     public function testMimeTypesPermitidos()
     {
         $uploadedFile = new MultipleUploadedFile($this->files, __DIR__);
