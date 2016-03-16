@@ -45,7 +45,7 @@ class UploadedFile implements IUploadedFile
     public function __construct(array $uploadedFile)
     {
         if (!is_uploaded_file($uploadedFile['tmp_name'])) {
-            throw new \RuntimeException('O arquivo informado não é de um upload');
+            throw new \RuntimeException('The informed file is not a upload');
         }
         
         if ($uploadedFile['error'] != 0) {
@@ -60,31 +60,55 @@ class UploadedFile implements IUploadedFile
         
     }
     
+    /**
+     * Return the upload error
+     * @return int
+     */
     public function getFileError()
     {
         return $this->getFileError();
     }
 
+    /**
+     * Return the mime type of uploaded file
+     * @return string
+     */
     public function getFileMimeType()
     {
         return $this->uploadedMimeType;
     }
 
+    /**
+     * Return the file name of upload
+     * @return string
+     */
     public function getFileName()
     {
         return $this->uploadedName;
     }
 
+    /**
+     * Return the file size of upload
+     * @return int
+     */
     public function getFileSize()
     {
         return $this->uploadedSize;
     }
 
+    /**
+     * Return the temporary file path of upload
+     * @return string
+     */
     public function getTemporaryFile()
     {
         return $this->uploadedTempFile;
     }
     
+    /**
+     * Return the extension for upload
+     * @return string
+     */
     public function getExtension()
     {
         preg_match('/\.([a-zA-Z]{3,4})$/', $this->uploadedName, $matches);
