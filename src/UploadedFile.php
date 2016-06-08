@@ -1,117 +1,69 @@
 <?php
 
-namespace Alex\Upload;
+namespace Upload;
 
-use Alex\Upload\IUploadedFile;
-use Alex\Upload\UploadException;
+use Upload\FileInfoInterface;
+use Upload\UploadException;
 
 /**
  * Description of UploadedFile
  *
  * @author alex
  */
-class UploadedFile implements IUploadedFile
+class UploadedFile extends \SplFileInfo implements FileInfoInterface
 {
-    /**
-     * The file name of the uploaded file
-     * @var string
-     */
-    private $uploadedName;
-
-    /**
-     * The mime type of the uploated file
-     * @var string
-     */
-    private $uploadedMimeType;
-
-    /**
-     * The temporary directory of the uploaded file
-     * @var string
-     */
-    private $uploadedTempFile;
-
-    /**
-     * The number error of the uploaded file
-     * @var int
-     */
-    private $uploadedError;
-
-    /**
-     * The size of uploaded file
-     * @var int
-     */
-    private $uploadedSize;
+    private $filename;
+    private $mimeType;
+    private $md5;
+    private $extension;
     
     public function __construct(array $uploadedFile)
     {
-        if (!is_uploaded_file($uploadedFile['tmp_name'])) {
-            throw new \RuntimeException('The informed file is not a upload');
-        }
+        parent::__construct($uploadedFile['tmp_name']);
         
-        if ($uploadedFile['error'] != 0) {
-            throw new UploadException($uploadedFile['error']);
-        }
-        
-        $this->uploadedError = (int) $uploadedFile['error'];
-        $this->uploadedMimeType = $uploadedFile['type'];
-        $this->uploadedTempFile = $uploadedFile['tmp_name'];
-        $this->uploadedSize = (int) $uploadedFile['size'];
-        $this->uploadedName = $uploadedFile['name'];
-        
+        $this->setMimeType($uploadedFile['type']);
+        $this->setFilename($uploadedFile['name']);
+        $this->setMd5();
+        $this->setExtension();
+    }
+
+    public function getFilename()
+    {
+        return $this->filename;
+    }
+
+    public function getMimeType()
+    {
+        return $this->mimeType;
+    }
+
+    public function getMd5()
+    {
+        return $this->md5;
     }
     
-    /**
-     * Return the upload error
-     * @return int
-     */
-    public function getFileError()
-    {
-        return $this->getFileError();
-    }
-
-    /**
-     * Return the mime type of uploaded file
-     * @return string
-     */
-    public function getFileMimeType()
-    {
-        return $this->uploadedMimeType;
-    }
-
-    /**
-     * Return the file name of upload
-     * @return string
-     */
-    public function getFileName()
-    {
-        return $this->uploadedName;
-    }
-
-    /**
-     * Return the file size of upload
-     * @return int
-     */
-    public function getFileSize()
-    {
-        return $this->uploadedSize;
-    }
-
-    /**
-     * Return the temporary file path of upload
-     * @return string
-     */
-    public function getTemporaryFile()
-    {
-        return $this->uploadedTempFile;
-    }
-    
-    /**
-     * Return the extension for upload
-     * @return string
-     */
     public function getExtension()
     {
-        preg_match('/\.([a-zA-Z]{3,4})$/', $this->uploadedName, $matches);
-        return $matches[1];
+        parent::getExtension();
+    }
+
+    public function setFilename($filename)
+    {
+        $this->filename = $filename;
+    }
+
+    public function setMimeType($mimeType)
+    {
+        $this->mimeType = $mimeType;
+    }
+
+    private function setMd5()
+    {
+        $this->md5 = md5_file($this->getRealPath());
+    }
+    
+    private function setExtension()
+    {
+        $this->extension = '';
     }
 }
