@@ -3,7 +3,6 @@
 namespace Upload;
 
 use Upload\FileInfoInterface;
-use Upload\UploadException;
 
 /**
  * Description of UploadedFile
@@ -21,8 +20,8 @@ class UploadedFile extends \SplFileInfo implements FileInfoInterface
     {
         parent::__construct($uploadedFile['tmp_name']);
         
-        $this->setMimeType($uploadedFile['type']);
         $this->setFilename($uploadedFile['name']);
+        $this->setMimeType();
         $this->setMd5();
         $this->setExtension();
     }
@@ -44,17 +43,22 @@ class UploadedFile extends \SplFileInfo implements FileInfoInterface
     
     public function getExtension()
     {
-        parent::getExtension();
+        return $this->extension;
+    }
+    
+    public function getBasename()
+    {
+        return $this->filename . '.' . $this->extension;
     }
 
     public function setFilename($filename)
     {
-        $this->filename = $filename;
+        $this->filename = pathinfo($filename, PATHINFO_FILENAME);
     }
 
-    public function setMimeType($mimeType)
+    private function setMimeType()
     {
-        $this->mimeType = $mimeType;
+        $this->mimeType = mime_content_type($this->getRealPath());
     }
 
     private function setMd5()
@@ -64,6 +68,7 @@ class UploadedFile extends \SplFileInfo implements FileInfoInterface
     
     private function setExtension()
     {
-        $this->extension = '';
+        $extension = pathinfo($this->getRealPath(), PATHINFO_EXTENSION);
+        $this->extension = strtolower($extension);
     }
 }

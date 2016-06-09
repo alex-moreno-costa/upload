@@ -9,28 +9,65 @@ use Upload\UploadedFile;
  */
 class UploadedFileTest extends \PHPUnit_Framework_TestCase
 {
-    private $file;
+    private $txt;
+    private $doc;
     
     public function setUp()
     {
-        $filepath = __DIR__ . '/assets/dumpfiles/file.txt';
+        $txtpath = __DIR__ . '/assets/dumpfiles/file.txt';
+        $docpath = __DIR__ . '/assets/dumpfiles/file.doc';
         
-        $file = array(
-            'tmp_name' => realpath($filepath),
-            'type' => 'text/plain',
-            'size' => filesize($filepath),
-            'name' => pathinfo($filepath, PATHINFO_FILENAME),
+        $txt = array(
+            'tmp_name' => realpath($txtpath),
+            'type' => mime_content_type($txtpath),
+            'size' => filesize($txtpath),
+            'name' => pathinfo($txtpath, PATHINFO_BASENAME),
         );
+        $this->txt = $txt;
         
-        $this->file = $file;
+        $doc = array(
+            'tmp_name' => realpath($docpath),
+            'type' => mime_content_type($docpath),
+            'size' => filesize($docpath),
+            'name' => pathinfo($docpath, PATHINFO_BASENAME),
+        );
+        $this->doc = $doc;
     }
     
-    
-    public function testVerificarInstancia()
+    public function testVerificarArquivoTXT()
     {
-        $upload = new UploadedFile($this->file);
+        $upload = new UploadedFile($this->txt);
         
         $this->assertInstanceOf('\SplFileInfo', $upload);
-        $this->assertEquals(filesize($this->file['tmp_name']), $upload->getSize());
+        $this->assertEquals(filesize($this->txt['tmp_name']), $upload->getSize());
+        $this->assertEquals(md5_file($this->txt['tmp_name']), $upload->getMd5());
+        $this->assertEquals($this->txt['name'], $upload->getBasename());
+        $this->assertEquals(pathinfo($this->txt['name'], PATHINFO_FILENAME), $upload->getFilename());
+        $this->assertEquals($this->txt['type'], $upload->getMimeType());
+        $this->assertEquals('txt', $upload->getExtension());
+        
+        
+        $new_name = 'abc';
+        $upload->setFilename($new_name);
+        $this->assertEquals($new_name . '.txt', $upload->getBasename());
+        $this->assertEquals($new_name, $upload->getFilename());
+    }
+    
+    public function testVerificarArquivoDOC()
+    {
+        $upload = new UploadedFile($this->doc);
+        
+        $this->assertInstanceOf('\SplFileInfo', $upload);
+        $this->assertEquals(filesize($this->doc['tmp_name']), $upload->getSize());
+        $this->assertEquals(md5_file($this->doc['tmp_name']), $upload->getMd5());
+        $this->assertEquals($this->doc['name'], $upload->getBasename());
+        $this->assertEquals(pathinfo($this->doc['name'], PATHINFO_FILENAME), $upload->getFilename());
+        $this->assertEquals($this->doc['type'], $upload->getMimeType());
+        $this->assertEquals('doc', $upload->getExtension());
+        
+        $new_name = 'abc';
+        $upload->setFilename($new_name);
+        $this->assertEquals($new_name . '.doc', $upload->getBasename());
+        $this->assertEquals($new_name, $upload->getFilename());
     }
 }
